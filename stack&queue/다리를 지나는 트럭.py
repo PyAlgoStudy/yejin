@@ -11,15 +11,17 @@ def solution(bridge_length, weight, truck_weights):
     cnt = 0
     on_brg_deq.append(truck_weights[0])
     nxt_truck_loc = 1
+    sum_on_brg_weight = truck_weights[0] #처음에는 sum함수를 사용하였는데 이 때 시간복잡도가 올라간다! 따라서 다리에서 나오고 빠질 때 sum 함수 대신 +, - 로 계산해주어야 한다!
     while nxt_truck_loc < len(truck_weights) and len(truck_weights) != 1:
         if len(on_brg_deq) >= bridge_length: #시간 다 된 애들은 하나씩 계속 빼주기
-            on_brg_deq.popleft()
+            sum_on_brg_weight -= on_brg_deq.popleft()
         if nxt_truck_loc < len(truck_weights):
-            if sum(on_brg_deq) + truck_weights[nxt_truck_loc] > weight:
+            if sum_on_brg_weight + truck_weights[nxt_truck_loc] > weight:
                 on_brg_deq.append(0)
                 cnt += 1
             else:
                 on_brg_deq.append(truck_weights[nxt_truck_loc])
+                sum_on_brg_weight += truck_weights[nxt_truck_loc]
                 nxt_truck_loc += 1 #트럭 하나 추가
                 cnt += 1
     return cnt + bridge_length +1
